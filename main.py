@@ -9,9 +9,11 @@ from pipe import Pipe_I
 from pipe import Pipe_S
 from build import Build
 from bird import Bird
+from scores import Scores
+from scores import Message
 
 SKY = (113, 197, 207)
-GAME_SIZE = (800, 700)
+GAME_SIZE = (684, 700)
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
 
@@ -21,7 +23,8 @@ DIST = 160
 class Flappy():
 
     def __init__(self):
-        pass
+        self.score = 0
+        self.best = 0
 
 
     def load_all(self):
@@ -42,10 +45,14 @@ class Flappy():
         self.build = Build(0, self.build_y)
         self.bird = Bird(self, 300)
         self.bird.mAcc = 0
+        self.scores = Scores(200, 200)
+        self.message = Message(200, 200)
         ########################################################################
         self.sprites.add(self.build)
         self.sprites.add(self.floor)
         self.sprites.add(self.bird)
+        #self.sprites.add(self.scores)
+        self.sprites.add(self.message)
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, 122)
@@ -57,6 +64,8 @@ class Flappy():
         self.bird.mAcc = 5
         self.bird.count = 20
         self.floor.mVel = -5
+        self.sprites.remove(self.scores)
+        self.sprites.remove(self.message)
 
     def main(self):
         
@@ -101,7 +110,7 @@ class Flappy():
 
                 col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
                 if not(col == []):
-                    print 'Toco'
+
                     t = col[0]
                     self.running = False
                     self.bird.mAcc = 0
@@ -109,6 +118,8 @@ class Flappy():
                     self.floor.mVel = 0
                     for spr in self.tubes:
                         spr.mVel = 0
+                    self.sprites.add(self.scores)
+                    self.sprites.draw(self.screen)
                     self.running_t = True
                     while self.running_t:
                         for event in pygame.event.get():
