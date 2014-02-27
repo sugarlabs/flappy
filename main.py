@@ -13,7 +13,7 @@ from scores import Scores
 from scores import Message
 
 SKY = (113, 197, 207)
-GAME_SIZE = (684, 700)
+GAME_SIZE = (684, 600)
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
 
