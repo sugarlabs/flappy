@@ -18,7 +18,7 @@ class Floor(pygame.sprite.Sprite):
             l = l + 1
             self.dx = l * 5 - self.large
         self.image = pygame.surface.Surface((self.large, 16), 0)
-        self.piece = pygame.image.load('floor.png')
+        self.piece = pygame.image.load('images/floor.png')
         for i in range(self.p):
             self.image.blit(self.piece, (i * 66, 0))
         self.rect = self.image.get_rect()

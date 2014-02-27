@@ -4,7 +4,7 @@
 
 import pygame
 
-build = pygame.image.load('buildings.png')
+build = pygame.image.load('images/buildings.png')
 
 
 class Build(pygame.sprite.Sprite):
