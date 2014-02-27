@@ -56,7 +56,7 @@ class Flappy():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.bird.setVel(5)
+                    self.bird.setVel(8)
                 elif event.type == pygame.KEYDOWN:
                     pass
 

@@ -6,6 +6,7 @@ import random
 
 bird_h = pygame.image.load('images/bird_h_alfa.png')
 bird_u = pygame.image.load('images/bird_u_alfa.png')
+bird_d1 = pygame.image.load('images/bird_d45_alfa.png')
 
 class Bird(pygame.sprite.Sprite):
 
@@ -35,11 +36,14 @@ class Bird(pygame.sprite.Sprite):
 
     def update(self):
         self.count = self.count - 1
+
         if self.count < 0:
             self.count = 0
+            self.setImage(bird_d1)
+            self.mPos[1] = self.mPos[1] + self.mAcc
+        elif self.count < 10:
             self.setImage(bird_h)
             self.mPos[1] = self.mPos[1] + self.mAcc
-            self.rect.y = self.mPos[1]
         else:
             self.mPos[1] = self.mPos[1] - self.mVel
             
