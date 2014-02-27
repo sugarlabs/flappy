@@ -20,7 +20,7 @@ DIST = 160
 class Flappy():
 
     def __init__(self):
-        self.sprites = pygame.sprite.Group()
+        self.sprites = pygame.sprite.LayeredUpdates()
         self.background = pygame.surface.Surface(GAME_SIZE, 0)
         self.background.fill(SKY)
         self.build_y = GAME_SIZE[1] - 229 - 50
@@ -30,15 +30,17 @@ class Flappy():
         self.game_p = GAME_SIZE[0] - DIST - 91
         self.max_s = GAME_SIZE[1] - 82 - 160
         ########################################################################
-        self.pipe = Pipe_I(self, self.game_w, 122)
+        pipe1 = Pipe_I(self, self.game_w, 122)
+        pipe2 = Pipe_S(self, self.game_w, GAME_SIZE[1] - 122 - 160)
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.build = Build(0, self.build_y)
         
         ########################################################################
-        #self.sprites.add(self.build)
+        self.sprites.add(self.build)
         self.sprites.add(self.floor)
         
-        self.sprites.add(self.pipe)
+        self.sprites.add(pipe1)
+        self.sprites.add(pipe2)
         
 
     def main(self):

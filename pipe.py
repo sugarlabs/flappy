@@ -38,12 +38,10 @@ class Pipe_I(pygame.sprite.Sprite):
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
         if self.mPos[0] < -91:
-            print 'out_i'
             self.parent.sprites.remove(self)
             
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:
-                print 'new'
                 self.flag = False
                 h = random.randrange(82, self.parent.max_s)
      
@@ -84,6 +82,5 @@ class Pipe_S(pygame.sprite.Sprite):
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
         if self.mPos[0] < -91:
-            print 'out_s'
             self.parent.sprites.remove(self)
 
