@@ -22,32 +22,13 @@ class Floor(pygame.sprite.Sprite):
         for i in range(self.p):
             self.image.blit(self.piece, (i * 66, 0))
         self.rect = self.image.get_rect()
-
-    def setXY(self, aX, aY):
-        self.mPos = [aX, aY]
-
-    def setPosTuple(self, position):
-        self.mPos = position
-
-    def setVel(self, aVec):
-        self.mVel = aVec
+        self.rect.x = self.mPos[0]
+        self.rect.y = self.mPos[1]
 
     def update(self):
         self.mPos[0] = self.mPos[0] + self.mVel
         if self.mPos[0] < -66:
             self.mPos[0] = 0
         self.rect.x = self.mPos[0]
-        self.rect.y = self.mPos[1]
-        
-    def getX(self):
-        return self.mPos[0]
-    
-    def getY(self):
-        return self.mPos[1]
-   
-    def getSize(self):
-        return (self.rect[2], self.rect[3])
-
-    def destroy(self):
-        self.image = None
+        #self.rect.y = self.mPos[1]
 

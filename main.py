@@ -8,6 +8,7 @@ from floor import Floor
 from pipe import Pipe_I
 from pipe import Pipe_S
 from build import Build
+from bird import Bird
 
 SKY = (113, 197, 207)
 GAME_SIZE = (800, 700)
@@ -34,25 +35,30 @@ class Flappy():
         pipe2 = Pipe_S(self, self.game_w, GAME_SIZE[1] - 122 - 160)
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.build = Build(0, self.build_y)
-        
+        self.bird = Bird(self, 300)
         ########################################################################
         self.sprites.add(self.build)
         self.sprites.add(self.floor)
         
-        self.sprites.add(pipe1)
-        self.sprites.add(pipe2)
+        #self.sprites.add(pipe1)
+        #self.sprites.add(pipe2)
+        self.sprites.add(self.bird)
         
 
     def main(self):
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(GAME_SIZE)
+        pygame.display.set_caption('Flappy')
         self.screen.blit(self.background, (0, 0))
         self.running = True
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.bird.setVel(5)
+                elif event.type == pygame.KEYDOWN:
+                    pass
 
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
