@@ -26,6 +26,7 @@ class Flappy():
         self.build_y = GAME_SIZE[1] - 229 - 50
         self.floor_y = GAME_SIZE[1] - 50
         self.game_w = GAME_SIZE[0]
+        self.game_h = GAME_SIZE[1]
         self.game_p = GAME_SIZE[0] - DIST - 91
         self.max_s = GAME_SIZE[1] - 82 - 160
         ########################################################################
