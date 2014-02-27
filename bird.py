@@ -22,7 +22,7 @@ class Bird(pygame.sprite.Sprite):
         self.mAcc = 5   
         self.image = None
         self.setImage(bird_h)
-        self.count = 0
+        self.count = -99
 
     def setImage(self, img):
         if not(self.image == img):
@@ -37,19 +37,21 @@ class Bird(pygame.sprite.Sprite):
         self.setImage(bird_u)
 
     def update(self):
-        self.count = self.count - 1
+        if not(self.count == -99):
+            self.count = self.count - 1
 
-        if self.count < 0:
-            self.count = 0
-            self.setImage(bird_d1)
-            self.mPos[1] = self.mPos[1] + self.mAcc
-        elif self.count < 10:
-            self.setImage(bird_h)
-            self.mPos[1] = self.mPos[1] + self.mAcc
-        else:
-            self.mPos[1] = self.mPos[1] - self.mVel
-            
-        self.rect.y = self.mPos[1]
+            if self.count < 0:
+                self.count = 0
+                self.setImage(bird_d1)
+                self.mPos[1] = self.mPos[1] + self.mAcc
+            elif self.count < 10:
+                self.setImage(bird_h)
+                self.mPos[1] = self.mPos[1] + self.mAcc
+            else:
+                self.mPos[1] = self.mPos[1] - self.mVel
+                
+            self.rect.y = self.mPos[1]
+        
 
 
 

@@ -83,7 +83,7 @@ class Pipe_S(pygame.sprite.Sprite):
     def update(self):
         self.mPos[0] = self.mPos[0] + self.mVel
         self.rect.x = self.mPos[0]
-        self.rect.y = self.mPos[1]
+
         if self.mPos[0] < -91:
             self.parent.sprites.remove(self)
             self.parent.tubes.remove(self)
