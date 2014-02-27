@@ -39,6 +39,7 @@ class Pipe_I(pygame.sprite.Sprite):
         self.rect.y = self.mPos[1]
         if self.mPos[0] < -91:
             self.parent.sprites.remove(self)
+            self.parent.tubes.remove(self)
             
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:
@@ -47,10 +48,12 @@ class Pipe_I(pygame.sprite.Sprite):
      
                 p = Pipe_I(self.parent, self.parent.game_w, h)
                 self.parent.sprites.add(p)
+                self.parent.tubes.add(p)
                 s = p.mPos[1] + p.height + 160
                 s = self.parent.game_h - p.height - 160 - 50
                 p = Pipe_S(self.parent, self.parent.game_w, s)
                 self.parent.sprites.add(p)
+                self.parent.tubes.add(p)
 
 class Pipe_S(pygame.sprite.Sprite):
 
@@ -83,4 +86,5 @@ class Pipe_S(pygame.sprite.Sprite):
         self.rect.y = self.mPos[1]
         if self.mPos[0] < -91:
             self.parent.sprites.remove(self)
+            self.parent.tubes.remove(self)
 

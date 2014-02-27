@@ -22,6 +22,7 @@ class Flappy():
 
     def __init__(self):
         self.sprites = pygame.sprite.LayeredUpdates()
+        self.tubes = pygame.sprite.LayeredUpdates()
         self.background = pygame.surface.Surface(GAME_SIZE, 0)
         self.background.fill(SKY)
         self.build_y = GAME_SIZE[1] - 229 - 50
@@ -40,8 +41,10 @@ class Flappy():
         self.sprites.add(self.build)
         self.sprites.add(self.floor)
         
-        #self.sprites.add(pipe1)
-        #self.sprites.add(pipe2)
+        self.sprites.add(pipe1)
+        self.sprites.add(pipe2)
+        self.tubes.add(pipe1)
+        self.tubes.add(pipe2)
         self.sprites.add(self.bird)
         
 
@@ -63,6 +66,12 @@ class Flappy():
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
             self.sprites.draw(self.screen)
+
+            col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
+            if not(col == []):
+                print 'Toco'
+                t = col[0]
+                
 
             pygame.display.flip()
             self.clock.tick(30)

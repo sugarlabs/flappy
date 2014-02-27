@@ -7,6 +7,8 @@ import random
 bird_h = pygame.image.load('images/bird_h_alfa.png')
 bird_u = pygame.image.load('images/bird_u_alfa.png')
 bird_d1 = pygame.image.load('images/bird_d45_alfa.png')
+bird_d2 = pygame.image.load('images/bird_d55_alfa.png')
+
 
 class Bird(pygame.sprite.Sprite):
 
