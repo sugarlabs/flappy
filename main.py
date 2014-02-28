@@ -33,6 +33,7 @@ from scores import Message
 from scores import CurrentScore
 
 SKY = (113, 197, 207)
+GROUND = (221, 216, 148)
 GAME_SIZE = (684, 600)
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
@@ -52,6 +53,7 @@ class Flappy():
         self.game_h = GAME_SIZE[1]
         self.game_p = GAME_SIZE[0] - DIST - 91
         self.max_s = GAME_SIZE[1] - 82 - 160
+        self.end_s_x = (self.game_w - 139) / 2
 
     def increment_score(self):
         self.score = self.score + 1
@@ -63,6 +65,8 @@ class Flappy():
         self.tubes = pygame.sprite.LayeredUpdates()
         self.background = pygame.surface.Surface(GAME_SIZE, 0)
         self.background.fill(SKY)
+        rect = pygame.rect.Rect(0, self.floor_y, self.game_w, self.game_h - self.floor_y)
+        self.background.fill(GROUND, rect)
         self.screen.blit(self.background, (0, 0))
 
         ########################################################################
@@ -71,7 +75,7 @@ class Flappy():
         self.build = Build(0, self.build_y)
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
-        self.end_scores = EndScore(200, 200)
+        self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(200, 200)
         self.currentS = CurrentScore(300, 100)
         ########################################################################
