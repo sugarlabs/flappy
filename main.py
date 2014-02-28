@@ -79,6 +79,7 @@ class Flappy():
         self.sprites.add(pipe2)
         self.tubes.add(pipe1)
         self.tubes.add(pipe2)
+        self.tubes.add(self.floor)
         self.bird.mAcc = 5
         self.bird.count = 20
         self.floor.mVel = -5
