@@ -41,24 +41,25 @@ DIST = 160
 class Flappy():
 
     def __init__(self):
-        self.score = 0
         self.best = 0
         self.bird_x = 200
         self.bird_y = 300
         self.pipe_w = 91
-
-    def load_all(self):
-        self.sprites = pygame.sprite.LayeredUpdates()
-        self.tubes = pygame.sprite.LayeredUpdates()
-        self.background = pygame.surface.Surface(GAME_SIZE, 0)
-        self.background.fill(SKY)
-        self.screen.blit(self.background, (0, 0))
         self.build_y = GAME_SIZE[1] - 229 - 50
         self.floor_y = GAME_SIZE[1] - 50
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
         self.game_p = GAME_SIZE[0] - DIST - 91
         self.max_s = GAME_SIZE[1] - 82 - 160
+
+    def load_all(self):
+        self.score = 0
+        self.sprites = pygame.sprite.LayeredUpdates()
+        self.tubes = pygame.sprite.LayeredUpdates()
+        self.background = pygame.surface.Surface(GAME_SIZE, 0)
+        self.background.fill(SKY)
+        self.screen.blit(self.background, (0, 0))
+
         ########################################################################
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.floor.mVel = 0
