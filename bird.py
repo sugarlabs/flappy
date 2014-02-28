@@ -12,12 +12,12 @@ bird_d2 = pygame.image.load('images/bird_d55_alfa.png')
 
 class Bird(pygame.sprite.Sprite):
 
-    def __init__(self, parent, y=0):
+    def __init__(self, parent, x=0, y=0):
         pygame.sprite.Sprite.__init__(self)
 
         self.parent = parent
         
-        self.mPos = [200, y]
+        self.mPos = [x, y]
         self.mVel = 0
         self.mAcc = 5   
         self.image = None

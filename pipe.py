@@ -13,6 +13,7 @@ class Pipe_I(pygame.sprite.Sprite):
     def __init__(self, parent, x=0, height=82):
         pygame.sprite.Sprite.__init__(self)
         self.flag = True
+        self.points = True
         self.parent = parent
         self.mPos = [x, 500]
         self.mVel = -5
@@ -37,9 +38,16 @@ class Pipe_I(pygame.sprite.Sprite):
         self.mPos[0] = self.mPos[0] + self.mVel
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
+
         if self.mPos[0] < -91:
             self.parent.sprites.remove(self)
             self.parent.tubes.remove(self)
+
+        elif self.mPos[0] < (self.parent.bird_x - self.parent.pipe_w):
+            if self.points:
+                self.points = False
+                self.parent.score = self.parent.score + 1
+                print self.parent.score
             
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:
@@ -54,6 +62,8 @@ class Pipe_I(pygame.sprite.Sprite):
                 p = Pipe_S(self.parent, self.parent.game_w, s)
                 self.parent.sprites.add(p)
                 self.parent.tubes.add(p)
+
+
 
 class Pipe_S(pygame.sprite.Sprite):
 

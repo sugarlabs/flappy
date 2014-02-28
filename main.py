@@ -43,7 +43,9 @@ class Flappy():
     def __init__(self):
         self.score = 0
         self.best = 0
-
+        self.bird_x = 200
+        self.bird_y = 300
+        self.pipe_w = 91
 
     def load_all(self):
         self.sprites = pygame.sprite.LayeredUpdates()
@@ -61,7 +63,7 @@ class Flappy():
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.floor.mVel = 0
         self.build = Build(0, self.build_y)
-        self.bird = Bird(self, 300)
+        self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.scores = Scores(200, 200)
         self.message = Message(200, 200)
