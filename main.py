@@ -28,7 +28,7 @@ from pipe import Pipe_I
 from pipe import Pipe_S
 from build import Build
 from bird import Bird
-from scores import Scores
+from scores import EndScore
 from scores import Message
 from scores import CurrentScore
 
@@ -71,7 +71,7 @@ class Flappy():
         self.build = Build(0, self.build_y)
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
-        self.scores = Scores(200, 200)
+        self.end_scores = EndScore(200, 200)
         self.message = Message(200, 200)
         self.currentS = CurrentScore(300, 100)
         ########################################################################
@@ -93,7 +93,7 @@ class Flappy():
         self.bird.mAcc = 5
         self.bird.count = 20
         self.floor.mVel = -5
-        self.sprites.remove(self.scores)
+        self.sprites.remove(self.end_scores)
         self.sprites.remove(self.message)
 
     def main(self):
@@ -148,7 +148,10 @@ class Flappy():
                     self.floor.mVel = 0
                     for spr in self.tubes:
                         spr.mVel = 0
-                    self.sprites.add(self.scores, layer=3)
+                    if self.score > self.best:
+                        self.best = self.score
+                    self.end_scores.update_scores(self.score, self.best)
+                    self.sprites.add(self.end_scores, layer=3)
                     self.sprites.draw(self.screen)
                     self.running_t = True
                     while self.running_t:
