@@ -46,8 +46,7 @@ class Pipe_I(pygame.sprite.Sprite):
         elif self.mPos[0] < (self.parent.bird_x - self.parent.pipe_w):
             if self.points:
                 self.points = False
-                self.parent.score = self.parent.score + 1
-                print self.parent.score
+                self.parent.increment_score()
             
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:

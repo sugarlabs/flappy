@@ -30,6 +30,7 @@ from build import Build
 from bird import Bird
 from scores import Scores
 from scores import Message
+from scores import CurrentScore
 
 SKY = (113, 197, 207)
 GAME_SIZE = (684, 600)
@@ -52,6 +53,10 @@ class Flappy():
         self.game_p = GAME_SIZE[0] - DIST - 91
         self.max_s = GAME_SIZE[1] - 82 - 160
 
+    def increment_score(self):
+        self.score = self.score + 1
+        self.currentS.set_score(self.score)
+
     def load_all(self):
         self.score = 0
         self.sprites = pygame.sprite.LayeredUpdates()
@@ -68,12 +73,13 @@ class Flappy():
         self.bird.mAcc = 0
         self.scores = Scores(200, 200)
         self.message = Message(200, 200)
+        self.currentS = CurrentScore(300, 100)
         ########################################################################
         self.sprites.add(self.build)
         self.sprites.add(self.floor)
         self.sprites.add(self.bird)
-        #self.sprites.add(self.scores)
         self.sprites.add(self.message)
+        
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, 122)
@@ -83,6 +89,7 @@ class Flappy():
         self.tubes.add(pipe1)
         self.tubes.add(pipe2)
         self.tubes.add(self.floor)
+        self.sprites.add(self.currentS)
         self.bird.mAcc = 5
         self.bird.count = 20
         self.floor.mVel = -5
@@ -90,7 +97,8 @@ class Flappy():
         self.sprites.remove(self.message)
 
     def main(self):
-        
+        pygame.display.init()
+        pygame.font.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(GAME_SIZE)
         pygame.display.set_caption('Flappy')
