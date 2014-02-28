@@ -54,12 +54,12 @@ class Pipe_I(pygame.sprite.Sprite):
                 h = random.randrange(82, self.parent.max_s)
      
                 p = Pipe_I(self.parent, self.parent.game_w, h)
-                self.parent.sprites.add(p)
+                self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
                 s = p.mPos[1] + p.height + 160
                 s = self.parent.game_h - p.height - 160 - 50
                 p = Pipe_S(self.parent, self.parent.game_w, s)
-                self.parent.sprites.add(p)
+                self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
 
 

@@ -75,21 +75,21 @@ class Flappy():
         self.message = Message(200, 200)
         self.currentS = CurrentScore(300, 100)
         ########################################################################
-        self.sprites.add(self.build)
-        self.sprites.add(self.floor)
-        self.sprites.add(self.bird)
-        self.sprites.add(self.message)
+        self.sprites.add(self.build, layer=0)
+        self.sprites.add(self.floor, layer=0)
+        self.sprites.add(self.bird, layer=2)
+        self.sprites.add(self.message, layer=3)
         
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, 122)
         pipe2 = Pipe_S(self, self.game_w, GAME_SIZE[1] - 122 - 160)
-        self.sprites.add(pipe1)
-        self.sprites.add(pipe2)
+        self.sprites.add(pipe1, layer=1)
+        self.sprites.add(pipe2, layer=1)
         self.tubes.add(pipe1)
         self.tubes.add(pipe2)
         self.tubes.add(self.floor)
-        self.sprites.add(self.currentS)
+        self.sprites.add(self.currentS, layer=3)
         self.bird.mAcc = 5
         self.bird.count = 20
         self.floor.mVel = -5
@@ -148,7 +148,7 @@ class Flappy():
                     self.floor.mVel = 0
                     for spr in self.tubes:
                         spr.mVel = 0
-                    self.sprites.add(self.scores)
+                    self.sprites.add(self.scores, layer=3)
                     self.sprites.draw(self.screen)
                     self.running_t = True
                     while self.running_t:
