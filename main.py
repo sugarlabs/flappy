@@ -32,32 +32,36 @@ from scores import EndScore
 from scores import Message
 from scores import CurrentScore
 
+GAME_SIZE = (684, 600)
+#GAME_SIZE = (1200, 700)
 SKY = (113, 197, 207)
 GROUND = (221, 216, 148)
-GAME_SIZE = (684, 600)
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
 PIPE_W = 91
 MIN_PIPE_H = 40 + 42
 MES_W = 227
 MES_H = 251
+PIPE_IH = 122
+FLOOR_Y = 50
 
 class Flappy():
 
     def __init__(self):
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
+        self.floor_y = self.game_h - FLOOR_Y
         self.best = 0
         self.bird_x = self.game_w / 3 - 50
         self.bird_y = self.game_h / 2
         self.pipe_w = PIPE_W
-        self.build_y = self.game_h - 229 - 50
-        self.floor_y = self.game_h - 50
+        self.build_y = self.floor_y - 229
         self.mes_x = (self.game_w - MES_W) / 2
         self.mes_y = (self.game_h - MES_H) / 2
-        self.game_p = GAME_SIZE[0] - DIST - self.pipe_w
-        self.max_s = GAME_SIZE[1] - MIN_PIPE_H - DIST
+        self.game_p = self.game_w - DIST - self.pipe_w
+        self.max_s = self.floor_y - MIN_PIPE_H - DIST
         self.end_s_x = (self.game_w - 139) / 2
+        self.sc_x = (self.game_w - 70) / 2
 
     def increment_score(self):
         self.score = self.score + 1
@@ -81,7 +85,7 @@ class Flappy():
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
-        self.currentS = CurrentScore(300, 100)
+        self.currentS = CurrentScore(self.sc_x, 100)
         ########################################################################
         self.sprites.add(self.build, layer=0)
         self.sprites.add(self.floor, layer=0)
@@ -90,8 +94,8 @@ class Flappy():
         
 
     def load_game(self):
-        pipe1 = Pipe_I(self, self.game_w, 122)
-        pipe2 = Pipe_S(self, self.game_w, GAME_SIZE[1] - 122 - 160)
+        pipe1 = Pipe_I(self, self.game_w, PIPE_IH)
+        pipe2 = Pipe_S(self, self.game_w, self.floor_y - PIPE_IH - DIST)
         self.sprites.add(pipe1, layer=1)
         self.sprites.add(pipe2, layer=1)
         self.tubes.add(pipe1)
@@ -172,9 +176,6 @@ class Flappy():
                             elif event.type == pygame.MOUSEBUTTONDOWN:
                                 self.running_t = False
                                 self.load_all()
-                        #self.sprites.clear(self.screen, self.background)
-                        #self.sprites.update()
-                        #self.sprites.draw(self.screen)
                         pygame.display.flip()
                         self.clock.tick(30)
 

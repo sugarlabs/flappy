@@ -52,12 +52,10 @@ class Pipe_I(pygame.sprite.Sprite):
             if self.flag:
                 self.flag = False
                 h = random.randrange(82, self.parent.max_s)
-     
                 p = Pipe_I(self.parent, self.parent.game_w, h)
                 self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
-                s = p.mPos[1] + p.height + 160
-                s = self.parent.game_h - p.height - 160 - 50
+                s = self.parent.floor_y - p.height - 160
                 p = Pipe_S(self.parent, self.parent.game_w, s)
                 self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
@@ -66,18 +64,19 @@ class Pipe_I(pygame.sprite.Sprite):
 
 class Pipe_S(pygame.sprite.Sprite):
 
-    def __init__(self, parent, x=0, height=82):
+    def __init__(self, parent, x, height):
         pygame.sprite.Sprite.__init__(self)
         self.flag = True
         self.parent = parent
         self.mPos = [x, 0]
         self.mVel = -5
-        if height < 82:
-            height = 82
         h = height - 42
         self.p = h / 40
         self.height = self.p * 40 + 42
-        #self.mPos[1] = self.parent.game_h - self.height
+        if self.height > height:
+            print 'truee'
+            dx = self.height - height
+            self.mPos[1] = -dx
         self.image = pygame.surface.Surface((91, self.height), 0)
         self.image.fill((255, 255, 255))
 
