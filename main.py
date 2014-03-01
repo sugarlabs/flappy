@@ -80,7 +80,7 @@ class Flappy():
         ########################################################################
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.floor.mVel = 0
-        self.build = Build(0, self.build_y)
+        self.build = Build(self, 0, self.build_y)
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
