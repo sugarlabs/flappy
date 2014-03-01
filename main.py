@@ -37,22 +37,26 @@ GROUND = (221, 216, 148)
 GAME_SIZE = (684, 600)
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
-
-
+PIPE_W = 91
+MIN_PIPE_H = 40 + 42
+MES_W = 227
+MES_H = 251
 
 class Flappy():
 
     def __init__(self):
-        self.best = 0
-        self.bird_x = 200
-        self.bird_y = 300
-        self.pipe_w = 91
-        self.build_y = GAME_SIZE[1] - 229 - 50
-        self.floor_y = GAME_SIZE[1] - 50
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
-        self.game_p = GAME_SIZE[0] - DIST - 91
-        self.max_s = GAME_SIZE[1] - 82 - 160
+        self.best = 0
+        self.bird_x = self.game_w / 3 - 50
+        self.bird_y = self.game_h / 2
+        self.pipe_w = PIPE_W
+        self.build_y = self.game_h - 229 - 50
+        self.floor_y = self.game_h - 50
+        self.mes_x = (self.game_w - MES_W) / 2
+        self.mes_y = (self.game_h - MES_H) / 2
+        self.game_p = GAME_SIZE[0] - DIST - self.pipe_w
+        self.max_s = GAME_SIZE[1] - MIN_PIPE_H - DIST
         self.end_s_x = (self.game_w - 139) / 2
 
     def increment_score(self):
@@ -76,7 +80,7 @@ class Flappy():
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
-        self.message = Message(200, 200)
+        self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(300, 100)
         ########################################################################
         self.sprites.add(self.build, layer=0)
@@ -119,7 +123,8 @@ class Flappy():
                     self.running = True
                     self.load_game()
                 elif event.type == pygame.KEYDOWN:
-                    pass
+                    self.running = True
+                    self.load_game()
 
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
@@ -136,7 +141,7 @@ class Flappy():
                     elif event.type == pygame.MOUSEBUTTONDOWN:
                         self.bird.setVel(8)
                     elif event.type == pygame.KEYDOWN:
-                        pass
+                        self.bird.setVel(8)
 
                 self.sprites.clear(self.screen, self.background)
                 self.sprites.update()
