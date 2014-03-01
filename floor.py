@@ -27,8 +27,7 @@ class Floor(pygame.sprite.Sprite):
 
     def update(self):
         self.mPos[0] = self.mPos[0] + self.mVel
-        if self.mPos[0] < -66:
+        if self.mPos[0] <= -65:
             self.mPos[0] = 0
         self.rect.x = self.mPos[0]
-        #self.rect.y = self.mPos[1]
 
