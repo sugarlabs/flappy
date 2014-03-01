@@ -26,7 +26,7 @@ import pygame.sprite as sprite
 from floor import Floor
 from pipe import Pipe_I
 from pipe import Pipe_S
-from build import Build
+from background import make_back
 from bird import Bird
 from scores import EndScore
 from scores import Message
@@ -34,8 +34,7 @@ from scores import CurrentScore
 
 GAME_SIZE = (684, 600)
 #GAME_SIZE = (1200, 700)
-SKY = (113, 197, 207)
-GROUND = (221, 216, 148)
+
 MIN_HEIGHT = 82 * 2 + 160
 DIST = 160
 PIPE_W = 91
@@ -71,23 +70,20 @@ class Flappy():
         self.score = 0
         self.sprites = pygame.sprite.LayeredUpdates()
         self.tubes = pygame.sprite.LayeredUpdates()
-        self.background = pygame.surface.Surface(GAME_SIZE, 0)
-        self.background.fill(SKY)
-        rect = pygame.rect.Rect(0, self.floor_y, self.game_w, self.game_h - self.floor_y)
-        self.background.fill(GROUND, rect)
+        self.background = make_back(self)
         self.screen.blit(self.background, (0, 0))
 
         ########################################################################
         self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
         self.floor.mVel = 0
-        self.build = Build(self, 0, self.build_y)
+
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self.sc_x, 100)
         ########################################################################
-        self.sprites.add(self.build, layer=0)
+
         self.sprites.add(self.floor, layer=0)
         self.sprites.add(self.bird, layer=2)
         self.sprites.add(self.message, layer=3)
