@@ -3,24 +3,19 @@
 
 import pygame
 
+piece = pygame.image.load('images/floor.png')
+
 class Floor(pygame.sprite.Sprite):
 
     def __init__(self, x=0, y=0, large=100):
         pygame.sprite.Sprite.__init__(self)
         self.mPos = [x, y]
         self.mVel = -5
-        self.p = large / 66 + 1
+        self.p = large / 66 + 2
         self.large = self.p * 66
-        if (self.large % 5) == 0:
-            self.dx = 5
-        else:
-            l = self.large / 5
-            l = l + 1
-            self.dx = l * 5 - self.large
         self.image = pygame.surface.Surface((self.large, 16), 0)
-        self.piece = pygame.image.load('images/floor.png')
         for i in range(self.p):
-            self.image.blit(self.piece, (i * 66, 0))
+            self.image.blit(piece, (i * 66, 0))
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
