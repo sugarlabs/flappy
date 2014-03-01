@@ -44,9 +44,14 @@ MES_H = 251
 PIPE_IH = 122
 FLOOR_Y = 50
 
+INIT = 0
+PLAY = 1
+END = 2
+
 class Flappy():
 
     def __init__(self):
+        self.state = INIT
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
@@ -72,22 +77,18 @@ class Flappy():
         self.tubes = pygame.sprite.LayeredUpdates()
         self.background = make_back(self)
         self.screen.blit(self.background, (0, 0))
-
         ########################################################################
-        self.floor = Floor(0, self.floor_y, GAME_SIZE[0])
+        self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
-
         self.bird = Bird(self, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self.sc_x, 100)
         ########################################################################
-
         self.sprites.add(self.floor, layer=0)
         self.sprites.add(self.bird, layer=2)
         self.sprites.add(self.message, layer=3)
-        
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH)
@@ -110,73 +111,43 @@ class Flappy():
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(GAME_SIZE)
         pygame.display.set_caption('Flappy')
-        
         self.load_all()
-        self.big_running = True
-        self.running_t = True
-        self.running = False
-        while self.big_running:
+        self.state = INIT
+        self.running = True
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.big_running = False
+                    self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.running = True
-                    self.load_game()
-                elif event.type == pygame.KEYDOWN:
-                    self.running = True
-                    self.load_game()
+                    if self.state == INIT:
+                        self.state = PLAY
+                        self.load_game()
+                    elif self.state == PLAY:
+                        self.bird.setVel(8)
+                    elif self.state == END:
+                        self.state = INIT
+                        self.load_all()
 
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
             self.sprites.draw(self.screen)
+           
+            col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
+            if not(col == []):
+                self.state = END
+                self.bird.mAcc = 0
+                self.bird.count = -99
+                self.floor.mVel = 0
+                for spr in self.tubes:
+                    spr.mVel = 0
+                if self.score > self.best:
+                    self.best = self.score
+                self.end_scores.update_scores(self.score, self.best)
+                self.sprites.add(self.end_scores, layer=3)
+                self.sprites.draw(self.screen)
 
             pygame.display.flip()
             self.clock.tick(30)
-            
-            while self.running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        self.running = False
-                        self.big_running = False
-                    elif event.type == pygame.MOUSEBUTTONDOWN:
-                        self.bird.setVel(8)
-                    elif event.type == pygame.KEYDOWN:
-                        self.bird.setVel(8)
-
-                self.sprites.clear(self.screen, self.background)
-                self.sprites.update()
-                self.sprites.draw(self.screen)
-
-                col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
-                if not(col == []):
-
-                    t = col[0]
-                    self.running = False
-                    self.bird.mAcc = 0
-                    self.bird.count = -99
-                    self.floor.mVel = 0
-                    for spr in self.tubes:
-                        spr.mVel = 0
-                    if self.score > self.best:
-                        self.best = self.score
-                    self.end_scores.update_scores(self.score, self.best)
-                    self.sprites.add(self.end_scores, layer=3)
-                    self.sprites.draw(self.screen)
-                    self.running_t = True
-                    while self.running_t:
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                self.running = False
-                                self.running_t = False
-                                self.big_running = False
-                            elif event.type == pygame.MOUSEBUTTONDOWN:
-                                self.running_t = False
-                                self.load_all()
-                        pygame.display.flip()
-                        self.clock.tick(30)
-
-                pygame.display.flip()
-                self.clock.tick(30)
 
 
 if __name__ == "__main__":
