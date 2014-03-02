@@ -37,8 +37,9 @@ class EndScore(pygame.sprite.Sprite):
 
 class CurrentScore(pygame.sprite.Sprite):
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, parent, x, y):
         pygame.sprite.Sprite.__init__(self)
+        self.parent = parent
         self.mPos = [x, y]
         self.points = 0
         self.image = back
@@ -60,6 +61,7 @@ class CurrentScore(pygame.sprite.Sprite):
         self.image.set_colorkey(self.bgColor)
         self.image.blit(fontSurface, (0, 0))
         self.rect = self.image.get_rect()
+        self.mPos[0] = (self.parent.game_w - self.size[0]) / 2
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
 

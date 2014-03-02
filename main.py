@@ -84,7 +84,7 @@ class Flappy():
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
-        self.currentS = CurrentScore(self.sc_x, 100)
+        self.currentS = CurrentScore(self, self.sc_x, 100)
         ########################################################################
         self.sprites.add(self.floor, layer=0)
         self.sprites.add(self.bird, layer=2)
