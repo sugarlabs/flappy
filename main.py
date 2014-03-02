@@ -64,6 +64,7 @@ class Flappy():
         self.mes_y = (self.game_h - MES_H) / 2
         self.game_p = self.game_w - DIST - self.pipe_w
         self.max_s = self.floor_y - MIN_PIPE_H - DIST
+        self.min_pipe_h = MIN_PIPE_H
         self.end_s_x = (self.game_w - 139) / 2
         self.sc_x = (self.game_w - 70) / 2
 

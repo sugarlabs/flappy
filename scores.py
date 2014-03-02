@@ -75,6 +75,3 @@ class Message(pygame.sprite.Sprite):
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
 
-
-
-

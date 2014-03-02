@@ -14,9 +14,7 @@ class Bird(pygame.sprite.Sprite):
 
     def __init__(self, parent, x=0, y=0):
         pygame.sprite.Sprite.__init__(self)
-
         self.parent = parent
-        
         self.mPos = [x, y]
         self.mVel = 0
         self.mAcc = 5   
