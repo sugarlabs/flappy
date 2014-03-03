@@ -1,0 +1,8 @@
+[Activity]
+name = Flappy
+activity_version = 1
+bundle_id = org.ceibaljam.flappy
+icon = flappy
+exec = sugar-activity activity.Activity
+license = GPLv3
+summary = The popular Flappy bird game
