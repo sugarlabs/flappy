@@ -53,10 +53,16 @@ class Flappy():
 
     def __init__(self):
         self.state = INIT
+        self.best = 0
+
+    def increment_score(self):
+        self.score = self.score + 1
+        self.currentS.set_score(self.score)
+
+    def load_all(self):
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
-        self.best = 0
         self.bird_x = self.game_w / 3 - 50
         self.bird_y = self.game_h / 2
         self.pipe_w = PIPE_W
@@ -68,12 +74,6 @@ class Flappy():
         self.min_pipe_h = MIN_PIPE_H
         self.end_s_x = (self.game_w - 139) / 2
         self.sc_x = (self.game_w - 70) / 2
-
-    def increment_score(self):
-        self.score = self.score + 1
-        self.currentS.set_score(self.score)
-
-    def load_all(self):
         self.score = 0
         self.sprites = pygame.sprite.LayeredUpdates()
         self.tubes = pygame.sprite.LayeredUpdates()
@@ -111,8 +111,17 @@ class Flappy():
         pygame.display.init()
         pygame.font.init()
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode(GAME_SIZE)
-        pygame.display.set_caption('Flappy')
+        self.screen = pygame.display.get_surface()
+        if self.screen:
+            w = self.screen.get_width()
+            h = self.screen.get_height()
+            #self.game_dx = (w - GAME_SIZE[0]) / 2
+            #self.game_dy = (h - GAME_SIZE[1]) / 2
+            global GAME_SIZE
+            GAME_SIZE = [w, h]
+        else:
+            self.screen = pygame.display.set_mode(GAME_SIZE)
+            pygame.display.set_caption('Flappy')
         self.load_all()
         self.state = INIT
         self.running = True
