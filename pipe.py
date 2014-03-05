@@ -48,7 +48,15 @@ class Pipe_I(pygame.sprite.Sprite):
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:
                 self.flag = False
-                h = random.randrange(self.parent.min_pipe_h, self.parent.max_s)
+
+                mi = self.height - 160
+                ma = self.height + 160
+                if mi < 82:
+                    mi = 82
+                if ma > self.parent.max_s:
+                    ma = self.parent.max_s
+
+                h = random.randrange(mi, ma)
                 p = Pipe_I(self.parent, self.parent.game_w, h)
                 self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
