@@ -36,14 +36,14 @@ from scores import CurrentScore
 GAME_SIZE = (684, 600)
 #GAME_SIZE = (1200, 700)
 
-MIN_HEIGHT = 82 * 2 + 160
+FLOOR_Y = 50
 DIST = 160
 PIPE_W = 91
 MIN_PIPE_H = 40 + 42
+MIN_HEIGHT = MIN_PIPE_H * 2 + DIST + FLOOR_Y
 MES_W = 227
 MES_H = 251
 PIPE_IH = 122
-FLOOR_Y = 50
 
 INIT = 0
 PLAY = 1
@@ -63,7 +63,7 @@ class Flappy():
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
-        self.bird_x = self.game_w / 3 - 50
+        self.bird_x = self.game_w / 3 - FLOOR_Y
         self.bird_y = self.game_h / 2
         self.pipe_w = PIPE_W
         self.build_y = self.floor_y - 229
