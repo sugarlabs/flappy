@@ -9,7 +9,7 @@ from sugar.graphics.toolbarbox import ToolbarBox
 from sugar.activity.widgets import ActivityToolbarButton
 from sugar.graphics.toolbutton import ToolButton
 from sugar.activity.widgets import StopButton
-
+from gettext import gettext as _
 import main
 
 class Activity(activity.Activity):
@@ -17,6 +17,7 @@ class Activity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
         self.max_participants = 1
+        self.sound = True
         self.actividad = main.Flappy()
         self.build_toolbar()
         self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
@@ -36,6 +37,17 @@ class Activity(activity.Activity):
 
         separator = gtk.SeparatorToolItem()
         separator.props.draw = False
+        separator.set_expand(False)
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
+
+        button = ToolButton('speaker-muted-100')
+        button.set_tooltip(_('Sound'))
+        button.connect('clicked', self.sound_control)
+        toolbar_box.toolbar.insert(button, -1)
+
+        separator = gtk.SeparatorToolItem()
+        separator.props.draw = False
         separator.set_expand(True)
         toolbar_box.toolbar.insert(separator, -1)
         separator.show()
@@ -45,4 +57,15 @@ class Activity(activity.Activity):
         stop_button.show()
 
         self.show_all()
+
+    def sound_control(self, button):
+        self.sound = not self.sound
+        self.actividad.sound = self.sound
+        if not self.sound:
+            button.set_icon('speaker-muted-000')
+            button.set_tooltip(_('No sound'))
+        else:
+            button.set_icon('speaker-muted-100')
+            button.set_tooltip(_('Sound'))
+
 
