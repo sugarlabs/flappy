@@ -59,7 +59,7 @@ class Flappy():
     def increment_score(self):
         self.score = self.score + 1
         self.currentS.set_score(self.score)
-        if self.sound:
+        if self.sound_enable and self.sound:
             self._snd_pipe.play()
 
     def load_all(self):
@@ -126,10 +126,14 @@ class Flappy():
         else:
             self.screen = pygame.display.set_mode(GAME_SIZE)
             pygame.display.set_caption('Flappy')
-        self._snd_pipe = pygame.mixer.Sound('sounds/pipe.ogg')
-        self._snd_pipe.set_volume(0.5)
-        self._snd_bird = pygame.mixer.Sound('sounds/bird.ogg')
-        self._snd_bird.set_volume(0.5)
+        self.sound_enable = True
+        try:
+            self._snd_pipe = pygame.mixer.Sound('sounds/pipe.ogg')
+            self._snd_pipe.set_volume(0.5)
+            self._snd_bird = pygame.mixer.Sound('sounds/bird.ogg')
+            self._snd_bird.set_volume(0.5)
+        except:
+            self.sound_enable = False
         self.load_all()
         self.state = INIT
         self.running = True
@@ -145,7 +149,7 @@ class Flappy():
                         self.load_game()
                     elif self.state == PLAY:
                         self.bird.setVel(8)
-                        if self.sound:
+                        if self.sound_enable and self.sound:
                             self._snd_bird.play()
                     elif self.state == END:
                         self.state = INIT
