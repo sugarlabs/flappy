@@ -118,8 +118,6 @@ class Flappy():
         if self.screen:
             w = self.screen.get_width()
             h = self.screen.get_height()
-            #self.game_dx = (w - GAME_SIZE[0]) / 2
-            #self.game_dy = (h - GAME_SIZE[1]) / 2
             global GAME_SIZE
             GAME_SIZE = [w, h]
         else:
@@ -128,9 +126,9 @@ class Flappy():
         self.sound_enable = True
         try:
             pygame.mixer.init()
-            self._snd_pipe = pygame.mixer.Sound('sounds/pipe.ogg')
+            self._snd_pipe = pygame.mixer.Sound('data/sounds/pipe.ogg')
             self._snd_pipe.set_volume(0.5)
-            self._snd_bird = pygame.mixer.Sound('sounds/bird.ogg')
+            self._snd_bird = pygame.mixer.Sound('data/sounds/bird.ogg')
             self._snd_bird.set_volume(0.5)
         except:
             self.sound_enable = False
