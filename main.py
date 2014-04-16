@@ -113,7 +113,6 @@ class Flappy():
     def main(self):
         pygame.display.init()
         pygame.font.init()
-        pygame.mixer.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
         if self.screen:
@@ -128,6 +127,7 @@ class Flappy():
             pygame.display.set_caption('Flappy')
         self.sound_enable = True
         try:
+            pygame.mixer.init()
             self._snd_pipe = pygame.mixer.Sound('sounds/pipe.ogg')
             self._snd_pipe.set_volume(0.5)
             self._snd_bird = pygame.mixer.Sound('sounds/bird.ogg')
