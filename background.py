@@ -7,7 +7,7 @@ import math
 SKY = (113, 197, 207)
 GROUND = (221, 216, 148)
 
-build = pygame.image.load('images/buildings.png')
+build = pygame.image.load('data/images/buildings.png')
 
 
 def make_back(parent):

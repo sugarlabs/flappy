@@ -4,8 +4,8 @@
 import pygame
 from gettext import gettext as _
 
-back = pygame.image.load('images/score_alfa.png')
-mes = pygame.image.load('images/init_alfa.png')
+back = pygame.image.load('data/images/score_alfa.png')
+mes = pygame.image.load('data/images/init_alfa.png')
 
 class EndScore(pygame.sprite.Sprite):
 
@@ -14,9 +14,9 @@ class EndScore(pygame.sprite.Sprite):
         self.mPos = [x, y]
         self.score = 0
         self.best = 0
-        self.font20 = pygame.font.Font('DejaVuSans-Bold.ttf', 20)
-        self.font30 = pygame.font.Font('DejaVuSans-Bold.ttf', 30)
-        self.font40 = pygame.font.Font('DejaVuSans-Bold.ttf', 40)
+        self.font20 = pygame.font.Font('data/DejaVuSans-Bold.ttf', 20)
+        self.font30 = pygame.font.Font('data/DejaVuSans-Bold.ttf', 30)
+        self.font40 = pygame.font.Font('data/DejaVuSans-Bold.ttf', 40)
         self.fgColor = (255, 255, 255)
         self.mes_color = (252, 120, 88)
         self.mes_score = _('Score')
@@ -67,7 +67,7 @@ class CurrentScore(pygame.sprite.Sprite):
         self.points = 0
         self.image = back
         self.size = [50, 50]
-        self.font = pygame.font.Font('DejaVuSans-Bold.ttf', 50)
+        self.font = pygame.font.Font('data/DejaVuSans-Bold.ttf', 50)
         self.fgColor = (255, 255, 255)
         self.bgColor = (113, 197, 207)
         self._update_image()

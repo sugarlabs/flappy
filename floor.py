@@ -3,7 +3,7 @@
 
 import pygame
 
-piece = pygame.image.load('images/floor.png')
+piece = pygame.image.load('data/images/floor.png')
 
 class Floor(pygame.sprite.Sprite):
 

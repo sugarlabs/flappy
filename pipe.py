@@ -4,8 +4,8 @@
 import pygame
 import random
 
-head = pygame.image.load('images/head_pipe.png')
-body = pygame.image.load('images/pipe.png')
+head = pygame.image.load('data/images/head_pipe.png')
+body = pygame.image.load('data/images/pipe.png')
 
 
 class Pipe_I(pygame.sprite.Sprite):
