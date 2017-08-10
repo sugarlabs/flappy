@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gtk
+from gi.repository import Gtk
 import sugargame
 import sugargame.canvas
-from sugar.activity import activity
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import ActivityToolbarButton
-from sugar.graphics.toolbutton import ToolButton
-from sugar.activity.widgets import StopButton
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.activity.widgets import StopButton
 from gettext import gettext as _
 import main
 
@@ -35,7 +35,7 @@ class Activity(activity.Activity):
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
 
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(False)
         toolbar_box.toolbar.insert(separator, -1)
@@ -46,7 +46,7 @@ class Activity(activity.Activity):
         button.connect('clicked', self.sound_control)
         toolbar_box.toolbar.insert(button, -1)
 
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
         toolbar_box.toolbar.insert(separator, -1)

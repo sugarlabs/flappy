@@ -20,7 +20,7 @@
 # Contact information:
 # Alan Aguiar alanjas@hotmail.com
 
-import gtk
+from gi.repository import Gtk
 import pygame
 import sys
 import pygame.sprite as sprite
@@ -136,8 +136,8 @@ class Flappy():
         self.state = INIT
         self.running = True
         while self.running:
-            while gtk.events_pending():
-                gtk.main_iteration()
+            while Gtk.events_pending():
+                Gtk.main_iteration()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False

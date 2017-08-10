@@ -1,7 +1,7 @@
 [Activity]
 name = Flappy
 activity_version = 3
-bundle_id = org.ceibaljam.flappy
+bundle_id = org.ceibaljam.flaPPY
 icon = flappy
 exec = sugar-activity activity.Activity
 license = GPLv3
