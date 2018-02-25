@@ -5,6 +5,7 @@ import pygame
 
 piece = pygame.image.load('data/images/floor.png')
 
+
 class Floor(pygame.sprite.Sprite):
 
     def __init__(self, x=0, y=0, large=100):
@@ -25,4 +26,3 @@ class Floor(pygame.sprite.Sprite):
         if self.mPos[0] <= -65:
             self.mPos[0] = 0
         self.rect.x = self.mPos[0]
-

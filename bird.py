@@ -52,7 +52,3 @@ class Bird(pygame.sprite.Sprite):
                 self.mPos[1] = 0
 
             self.rect.y = self.mPos[1]
-        
-
-
-
