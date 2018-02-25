@@ -101,7 +101,10 @@ class Flappy():
         self.sprites.add(self.message, layer=3)
 
     def set_level(self, level):
-        self._factor = level / 3.0
+        factor = level / 3.0
+        if self._factor != factor:
+            self.best = 0
+        self._factor = factor
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
@@ -163,7 +166,8 @@ class Flappy():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEBUTTONDOWN or (
+                    event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                     if self.state == INIT:
                         self.state = PLAY
                         self.load_game()
