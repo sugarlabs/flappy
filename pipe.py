@@ -10,13 +10,14 @@ body = pygame.image.load('data/images/pipe.png')
 
 class Pipe_I(pygame.sprite.Sprite):
 
-    def __init__(self, parent, x, height):
+    def __init__(self, parent, x, height, factor):
         pygame.sprite.Sprite.__init__(self)
         self.flag = True
         self.points = True
         self.parent = parent
         self.mPos = [x, 500]
-        self.mVel = -5
+        self.factor = factor
+        self.mVel = -5 * self.factor
         h = height - 42
         self.p = h / 40
         self.height = self.p * 40 + 42
@@ -57,24 +58,23 @@ class Pipe_I(pygame.sprite.Sprite):
                     ma = self.parent.max_s
 
                 h = random.randrange(mi, ma)
-                p = Pipe_I(self.parent, self.parent.game_w, h)
+                p = Pipe_I(self.parent, self.parent.game_w, h, self.factor)
                 self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
                 s = self.parent.floor_y - p.height - 160
-                p = Pipe_S(self.parent, self.parent.game_w, s)
+                p = Pipe_S(self.parent, self.parent.game_w, s, self.factor)
                 self.parent.sprites.add(p, layer=1)
                 self.parent.tubes.add(p)
-
 
 
 class Pipe_S(pygame.sprite.Sprite):
 
-    def __init__(self, parent, x, height):
+    def __init__(self, parent, x, height, factor):
         pygame.sprite.Sprite.__init__(self)
         self.flag = True
         self.parent = parent
         self.mPos = [x, 0]
-        self.mVel = -5
+        self.mVel = -5 * factor
         h = height - 42
         self.p = h / 40
         self.height = self.p * 40 + 42

@@ -58,6 +58,7 @@ class Flappy():
         self.state = INIT
         self.best = 0
         self.sound = True
+        self._factor = 1
 
     def increment_score(self):
         self.score = self.score + 1
@@ -88,7 +89,7 @@ class Flappy():
         ########################################################################
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
-        self.bird = Bird(self, self.bird_x, self.bird_y)
+        self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
         self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
@@ -98,18 +99,21 @@ class Flappy():
         self.sprites.add(self.bird, layer=2)
         self.sprites.add(self.message, layer=3)
 
+    def set_level(self, level):
+        self._factor = level / 3.0
+
     def load_game(self):
-        pipe1 = Pipe_I(self, self.game_w, PIPE_IH)
-        pipe2 = Pipe_S(self, self.game_w, self.floor_y - PIPE_IH - DIST)
+        pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
+        pipe2 = Pipe_S(self, self.game_w, self.floor_y - PIPE_IH - DIST, self._factor)
         self.sprites.add(pipe1, layer=1)
         self.sprites.add(pipe2, layer=1)
         self.tubes.add(pipe1)
         self.tubes.add(pipe2)
         self.tubes.add(self.floor)
         self.sprites.add(self.currentS, layer=3)
-        self.bird.mAcc = 5
+        self.bird.mAcc = 5 * self._factor
         self.bird.count = 20
-        self.floor.mVel = -5
+        self.floor.mVel = -5 * self._factor
         self.sprites.remove(self.end_scores)
         self.sprites.remove(self.message)
 
