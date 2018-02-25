@@ -26,4 +26,3 @@ def make_back(parent):
     for i in range(t):
         back.blit(build, (684 * i, y))
     return back
-

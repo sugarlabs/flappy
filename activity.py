@@ -16,6 +16,7 @@ from gettext import gettext as _
 import main
 import pygame
 
+
 class Activity(activity.Activity):
 
     def __init__(self, handle):
@@ -26,9 +27,9 @@ class Activity(activity.Activity):
         self.build_toolbar()
         self.game.canvas = self._pygamecanvas = \
             sugargame.canvas.PygameCanvas(self,
-                main=self.game.run,
-                modules=[pygame.display, pygame.font,
-                pygame.mixer])
+                                          main=self.game.run,
+                                          modules=[pygame.display, pygame.font,
+                                                   pygame.mixer])
         self.set_canvas(self._pygamecanvas)
         self._pygamecanvas.grab_focus()
 
@@ -46,6 +47,7 @@ class Activity(activity.Activity):
         separator.show()
 
         self._levels_buttons = []
+
         def add_level_button(icon_name, tooltip, numeric_level):
             if self._levels_buttons:
                 button = RadioToolButton(icon_name=icon_name,
@@ -62,9 +64,9 @@ class Activity(activity.Activity):
             button.connect('clicked', callback)
             button.set_tooltip(tooltip)
 
-        add_level_button('male-7'  , _("Hard")  , 3)
+        add_level_button('male-7', _("Hard"), 3)
         add_level_button('male-4', _("Medium"), 2)
-        add_level_button('male-1'  , _("Easy")  , 1)
+        add_level_button('male-1', _("Easy"), 1)
 
         for button in self._levels_buttons[::-1]:
             toolbar_box.toolbar.insert(button, -1)
@@ -103,5 +105,3 @@ class Activity(activity.Activity):
         else:
             button.set_icon_name('speaker-muted-100')
             button.set_tooltip(_('Sound'))
-
-

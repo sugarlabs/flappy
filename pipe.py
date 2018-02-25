@@ -45,7 +45,7 @@ class Pipe_I(pygame.sprite.Sprite):
             if self.points:
                 self.points = False
                 self.parent.increment_score()
-            
+
         elif self.mPos[0] < (self.parent.game_p):
             if self.flag:
                 self.flag = False
@@ -99,4 +99,3 @@ class Pipe_S(pygame.sprite.Sprite):
         if self.mPos[0] < -91:
             self.parent.sprites.remove(self)
             self.parent.tubes.remove(self)
-

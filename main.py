@@ -21,7 +21,7 @@
 # Alan Aguiar alanjas@hotmail.com
 
 import gi
-gi.require_version('Gtk','3.0')
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 import pygame
@@ -51,6 +51,7 @@ PIPE_IH = 122
 INIT = 0
 PLAY = 1
 END = 2
+
 
 class Flappy():
 
@@ -86,7 +87,7 @@ class Flappy():
         self.tubes = pygame.sprite.LayeredUpdates()
         self.background = make_back(self)
         self.screen.blit(self.background, (0, 0))
-        ########################################################################
+        #######################################################################
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
         self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
@@ -94,7 +95,7 @@ class Flappy():
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self, self.sc_x, 100)
-        ########################################################################
+        #######################################################################
         self.sprites.add(self.floor, layer=0)
         self.sprites.add(self.bird, layer=2)
         self.sprites.add(self.message, layer=3)
@@ -104,7 +105,13 @@ class Flappy():
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
-        pipe2 = Pipe_S(self, self.game_w, self.floor_y - PIPE_IH - DIST, self._factor)
+        pipe2 = Pipe_S(
+            self,
+            self.game_w,
+            self.floor_y -
+            PIPE_IH -
+            DIST,
+            self._factor)
         self.sprites.add(pipe1, layer=1)
         self.sprites.add(pipe2, layer=1)
         self.tubes.add(pipe1)
@@ -145,7 +152,7 @@ class Flappy():
             self._snd_pipe.set_volume(0.5)
             self._snd_bird = pygame.mixer.Sound('data/sounds/bird.ogg')
             self._snd_bird.set_volume(0.5)
-        except:
+        except BaseException:
             self.sound_enable = False
         self.load_all()
         self.state = INIT
@@ -171,7 +178,7 @@ class Flappy():
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
             self.sprites.draw(self.screen)
-           
+
             col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
             if not(col == []):
                 self.state = END
@@ -193,4 +200,3 @@ class Flappy():
 if __name__ == "__main__":
     g = Flappy()
     g.main()
-
