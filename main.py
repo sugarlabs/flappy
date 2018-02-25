@@ -51,6 +51,7 @@ PIPE_IH = 122
 INIT = 0
 PLAY = 1
 END = 2
+PAUSE = 3
 
 
 class Flappy():
@@ -178,6 +179,17 @@ class Flappy():
                     elif self.state == END:
                         self.state = INIT
                         self.load_all()
+                    elif self.state == PAUSE:
+                        self.state = PLAY
+                elif event.type == pygame.KEYDOWN:
+                    if event.key in [pygame.K_p, pygame.K_ESCAPE]:
+                        if self.state == PAUSE:
+                            self.state = PLAY
+                        elif self.state == PLAY:
+                            self.state = PAUSE
+
+            if self.state == PAUSE:
+                continue
 
             self.sprites.clear(self.screen, self.background)
             self.sprites.update()
