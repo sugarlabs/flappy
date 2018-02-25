@@ -20,10 +20,13 @@
 # Contact information:
 # Alan Aguiar alanjas@hotmail.com
 
+import gi
+gi.require_version('Gtk','3.0')
 from gi.repository import Gtk
+
 import pygame
-import sys
-import pygame.sprite as sprite
+from sugar3.graphics.style import GRID_CELL_SIZE
+
 from floor import Floor
 from pipe import Pipe_I
 from pipe import Pipe_S
@@ -110,7 +113,15 @@ class Flappy():
         self.sprites.remove(self.end_scores)
         self.sprites.remove(self.message)
 
-    def main(self):
+    def run(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+            elif event.type == pygame.VIDEORESIZE:
+                pygame.display.set_mode(
+                    (event.size[0], event.size[1] - GRID_CELL_SIZE),
+                    pygame.RESIZABLE)
+                break
         pygame.display.init()
         pygame.font.init()
         self.clock = pygame.time.Clock()

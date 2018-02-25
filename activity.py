@@ -13,6 +13,7 @@ from sugar3.graphics.toolbutton import ToolButton
 from sugar3.activity.widgets import StopButton
 from gettext import gettext as _
 import main
+import pygame
 
 class Activity(activity.Activity):
 
@@ -20,12 +21,15 @@ class Activity(activity.Activity):
         activity.Activity.__init__(self, handle)
         self.max_participants = 1
         self.sound = True
-        self.actividad = main.Flappy()
+        self.game = main.Flappy()
         self.build_toolbar()
-        self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
+        self.game.canvas = self._pygamecanvas = \
+            sugargame.canvas.PygameCanvas(self,
+                main=self.game.run,
+                modules=[pygame.display, pygame.font,
+                pygame.mixer])
         self.set_canvas(self._pygamecanvas)
         self._pygamecanvas.grab_focus()
-        self._pygamecanvas.run_pygame(self.actividad.main)
 
     def build_toolbar(self):
 
@@ -62,12 +66,12 @@ class Activity(activity.Activity):
 
     def sound_control(self, button):
         self.sound = not self.sound
-        self.actividad.sound = self.sound
+        self.game.sound = self.sound
         if not self.sound:
-            button.set_icon('speaker-muted-000')
+            button.set_icon_name('speaker-muted-000')
             button.set_tooltip(_('No sound'))
         else:
-            button.set_icon('speaker-muted-100')
+            button.set_icon_name('speaker-muted-100')
             button.set_tooltip(_('Sound'))
 
 

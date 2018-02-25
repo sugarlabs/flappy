@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-import random
 
 bird_h = pygame.image.load('data/images/bird_h_alfa.png')
 bird_u = pygame.image.load('data/images/bird_u_alfa.png')
