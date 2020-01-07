@@ -15,7 +15,7 @@ class Floor(pygame.sprite.Sprite):
         self.p = large / 66 + 2
         self.large = self.p * 66
         self.image = pygame.surface.Surface((self.large, 16), 0)
-        for i in range(self.p):
+        for i in range(int(self.p)):
             self.image.blit(piece, (i * 66, 0))
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
