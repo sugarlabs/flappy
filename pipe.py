@@ -19,7 +19,7 @@ class Pipe_I(pygame.sprite.Sprite):
         self.factor = factor
         self.mVel = -5 * self.factor
         h = height - 42
-        self.p = h / 40
+        self.p = h // 40
         self.height = self.p * 40 + 42
         self.mPos[1] = self.parent.floor_y - self.height
         self.image = pygame.surface.Surface((91, self.height), 0)
@@ -76,7 +76,7 @@ class Pipe_S(pygame.sprite.Sprite):
         self.mPos = [x, 0]
         self.mVel = -5 * factor
         h = height - 42
-        self.p = h / 40
+        self.p = h // 40
         self.height = self.p * 40 + 42
         if self.height > height:
             dx = self.height - height
