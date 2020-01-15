@@ -12,7 +12,7 @@ class Floor(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.mPos = [x, y]
         self.mVel = -5
-        self.p = large / 66 + 2
+        self.p = large // 66 + 2
         self.large = self.p * 66
         self.image = pygame.surface.Surface((self.large, 16), 0)
         for i in range(self.p):
