@@ -36,8 +36,8 @@ from scores import EndScore
 from scores import Message
 from scores import CurrentScore
 
-#GAME_SIZE = (684, 600)
-GAME_SIZE = (1200, 700)
+GAME_SIZE = (684, 600)
+#GAME_SIZE = (1200, 700)
 
 FLOOR_Y = 50
 DIST = 160
