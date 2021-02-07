@@ -1,5 +1,5 @@
 [Activity]
-name = Flappy-test
+name = Flappy
 activity_version = 5
 bundle_id = org.ceibaljam.flappy
 icon = flappy
