@@ -129,7 +129,7 @@ class Flappy():
         self.sprites.remove(self.message)
 
     def run(self):
-        pygame.display.init()
+        #pygame.display.init()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
