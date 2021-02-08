@@ -1,6 +1,6 @@
 [Activity]
 name = Flappy
-activity_version = 4
+activity_version = 5
 bundle_id = org.ceibaljam.flappy
 icon = flappy
 exec = sugar-activity3 activity.Activity
