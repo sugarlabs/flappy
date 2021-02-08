@@ -215,4 +215,4 @@ class Flappy():
 
 if __name__ == "__main__":
     g = Flappy()
-    g.main()
+    g.run()
