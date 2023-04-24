@@ -2,27 +2,45 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-import math
 
 SKY = (113, 197, 207)
 GROUND = (221, 216, 148)
+BUILDINGS_PATH = 'data/images/buildings.png'
 
-build = pygame.image.load('data/images/buildings.png')
 
+class Background(pygame.sprite.Sprite):
 
-def make_back(parent):
-    w = parent.game_w
-    h = parent.game_h
-    floor_y = parent.floor_y
-    back = pygame.surface.Surface((w, h), 0)
-    back.fill(SKY)
-    rect = pygame.rect.Rect(0, floor_y, w, h - floor_y)
-    back.fill(GROUND, rect)
-    if w > 684:
-        t = int(math.ceil(w / 684.0))
-    else:
-        t = 1
-    y = floor_y - 229
-    for i in range(t):
-        back.blit(build, (684 * i, y))
-    return back
+    def __init__(self, parent, factor):
+        pygame.sprite.Sprite.__init__(self)
+        self.pos_x = 0
+
+        bg_image = pygame.image.load(BUILDINGS_PATH).convert()
+        self.bg_width = bg_image.get_width()
+
+        # scale_factor for bg to match window
+        scale_factor = int(
+            parent.game_w / self.bg_width) + 2
+
+        self.image = pygame.surface.Surface((self.bg_width * scale_factor,
+                                            parent.game_h))
+
+        # Add sky and ground
+        self.image.fill(SKY)
+        rect = pygame.rect.Rect(0, parent.floor_y,
+                                self.bg_width * scale_factor,
+                                parent.game_h - parent.floor_y)
+        self.image.fill(GROUND, rect)
+
+        # Add buildings
+        for i in range(scale_factor):
+            self.image.blit(bg_image, (self.bg_width * i,
+                                       parent.floor_y - 229))
+
+        self.rect = self.image.get_rect()
+        self.rect.x = self.pos_x
+
+    def update(self):
+        self.pos_x -= self.mVel
+        if self.pos_x <= -(self.bg_width):
+            self.pos_x = 0
+        self.rect.x = round(self.pos_x)

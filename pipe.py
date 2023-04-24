@@ -20,9 +20,10 @@ class Pipe_I(pygame.sprite.Sprite):
         self.mVel = -5 * self.factor
         h = height - 42
         self.p = h // 40
-        self.height = self.p * 40 + 42
+        self.height = self.p * 40 + 50
         self.mPos[1] = self.parent.floor_y - self.height
         self.image = pygame.surface.Surface((91, self.height), 0)
+        self.mask = pygame.mask.from_surface(self.image)
         self.image.fill((255, 255, 255))
         self.image.blit(head, (0, 0))
         for i in range(self.p):
@@ -31,6 +32,7 @@ class Pipe_I(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         self.mPos[0] = self.mPos[0] + self.mVel
@@ -41,7 +43,7 @@ class Pipe_I(pygame.sprite.Sprite):
             self.parent.sprites.remove(self)
             self.parent.tubes.remove(self)
 
-        elif self.mPos[0] < (self.parent.bird_x - self.parent.pipe_w):
+        elif self.mPos[0] < (self.parent.bird_x - self.parent.pipe_w / 2):
             if self.points:
                 self.points = False
                 self.parent.increment_score()
@@ -91,6 +93,7 @@ class Pipe_S(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         self.mPos[0] = self.mPos[0] + self.mVel

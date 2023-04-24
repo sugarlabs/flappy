@@ -1,3 +1,25 @@
+#
+# Copyright (c) 2020 Wade Brainerd
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
 import logging
 from gi.repository import GLib
 from gi.repository import Gdk
@@ -68,12 +90,12 @@ class Translator(object):
 
         # Callback functions to link the event systems
         self._activity.connect('unrealize', self._quit_cb)
-        self._activity.connect('visibility_notify_event', self._visibility_cb)
+        self._activity.connect('visibility-notify-event', self._visibility_cb)
         self._activity.connect('configure-event', self._resize_cb)
-        self._inner_evb.connect('key_press_event', self._keydown_cb)
-        self._inner_evb.connect('key_release_event', self._keyup_cb)
-        self._inner_evb.connect('button_press_event', self._mousedown_cb)
-        self._inner_evb.connect('button_release_event', self._mouseup_cb)
+        self._inner_evb.connect('key-press-event', self._keydown_cb)
+        self._inner_evb.connect('key-release-event', self._keyup_cb)
+        self._inner_evb.connect('button-press-event', self._mousedown_cb)
+        self._inner_evb.connect('button-release-event', self._mouseup_cb)
         self._inner_evb.connect('motion-notify-event', self._mousemove_cb)
         self._inner_evb.connect('screen-changed', self._screen_changed_cb)
 
