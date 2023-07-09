@@ -53,6 +53,7 @@ PLAY = 1
 END = 2
 PAUSE = 3
 
+INIT_BIRD_SPEED = 8
 
 class Flappy():
 
@@ -92,7 +93,6 @@ class Flappy():
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
         self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
-        self.bird.mAcc = 0
         self.end_scores = EndScore(self.end_s_x, 200)
         self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self, self.sc_x, 100)
@@ -124,8 +124,6 @@ class Flappy():
         self.tubes.add(self.floor)
         self.sprites.add(self.currentS, layer=3)
         self.background.mVel = 5 * self._factor
-        self.bird.mAcc = 5 * self._factor
-        self.bird.count = 20
         self.floor.mVel = -5 * self._factor
         self.sprites.remove(self.end_scores)
         self.sprites.remove(self.message)
@@ -170,12 +168,14 @@ class Flappy():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN or (
-                    event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
+                        event.type == pygame.KEYDOWN and (
+                        event.key == pygame.K_SPACE or event.key == pygame.K_UP)):
                     if self.state == INIT:
                         self.state = PLAY
                         self.load_game()
                     elif self.state == PLAY:
-                        self.bird.setVel(8)
+                        self.bird.mVel = INIT_BIRD_SPEED * self._factor ** 0.7
+                        self.bird.counter = 0
                         if self.sound_enable and self.sound:
                             self._snd_bird.play()
                     elif self.state == END:
