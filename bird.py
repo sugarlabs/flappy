@@ -3,11 +3,6 @@
 
 import pygame
 
-bird_h = pygame.image.load('data/images/bird_h_alfa.png')
-bird_u = pygame.image.load('data/images/bird_u_alfa.png')
-bird_d1 = pygame.image.load('data/images/bird_d45_alfa.png')
-bird_d2 = pygame.image.load('data/images/bird_d55_alfa.png')
-
 
 class Bird(pygame.sprite.Sprite):
 
@@ -15,40 +10,60 @@ class Bird(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.factor = factor
         self.parent = parent
-        self.mPos = [x, y]
         self.mVel = 0
-        self.mAcc = 5 * self.factor
-        self.image = None
-        self.setImage(bird_h)
-        self.count = -99
+        self.velocity_limit = -20 * self.factor ** 1.7
+        self.acceleration = self.factor ** 0.6
+        self.images = []
+        self.index = 0
+        self.counter = 0
+        self.count_flap = 0
+        for num in range(0, 3):
+            img = pygame.image.load(
+                f"data/images/bird_{num}.png").convert_alpha()
+            self.images.append(img)
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.mask = pygame.mask.from_surface(self.image)
 
-    def setImage(self, img):
-        if not(self.image == img):
-            self.image = img
-            self.rect = self.image.get_rect()
-            self.rect.x = self.mPos[0]
-            self.rect.y = self.mPos[1]
+    # handle the animation
+    def wing_flap(self):
+        self.flap_cooldown = 5
+        self.count_flap += 1
 
-    def setVel(self, vel):
-        self.mVel = vel * self.factor
-        self.count = 20
-        self.setImage(bird_u)
+        if self.count_flap > self.flap_cooldown:
+            self.count_flap = 0
+            self.index += 1
+            if self.index >= len(self.images):
+                self.index = 0
+            self.image = self.images[self.index]
 
     def update(self):
-        if not(self.count == -99):
-            self.count = self.count - 1
+        if self.parent.state == 0 or self.parent.state == 1:
+            self.wing_flap()
+        if self.parent.state != 0:
+            # handle velocity
+            self.counter += 1
+            if self.counter > 5:
+                self.mVel -= self.acceleration
+            if self.mVel < self.velocity_limit:
+                self.mVel = self.velocity_limit
 
-            if self.count < 0:
-                self.count = 0
-                self.setImage(bird_d1)
-                self.mPos[1] = self.mPos[1] + self.mAcc
-            elif self.count < 10:
-                self.setImage(bird_h)
-                self.mPos[1] = self.mPos[1] + self.mAcc
-            else:
-                self.mPos[1] = self.mPos[1] - self.mVel
+            # prevents bird from falling through floor after collision
+            if self.rect.bottom > self.parent.floor_y:
+                self.rect.y += int(self.mVel)
 
-            if self.mPos[1] < 0:
-                self.mPos[1] = 0
+            # handle rotation
+            self.image = pygame.transform.rotate(
+                self.images[self.index], self.mVel * 2 / self.factor)
+            self.mask = pygame.mask.from_surface(self.image)
 
-            self.rect.y = self.mPos[1]
+            # handle bird y position
+            self.rect.y -= int(self.mVel)
+            if self.rect.y < 0:
+                self.rect.y = 0
+
+            # rotates bird after collision
+            if self.parent.state == 2:
+                self.image = pygame.transform.rotate(
+                    self.images[self.index], -90)
