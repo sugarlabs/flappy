@@ -36,9 +36,6 @@ from scores import EndScore
 from scores import Message
 from scores import CurrentScore
 
-GAME_SIZE = (684, 600)
-#GAME_SIZE = (1200, 700)
-
 FLOOR_Y = 50
 DIST = 160
 PIPE_W = 91
@@ -54,6 +51,8 @@ END = 2
 PAUSE = 3
 
 INIT_BIRD_SPEED = 8
+FPS = 30
+
 
 class Flappy():
 
@@ -61,7 +60,7 @@ class Flappy():
         self.state = INIT
         self.best = 0
         self.sound = True
-        self._factor = 1
+        self._factor = 1  # Default: 1 for hard
 
     def increment_score(self):
         self.score = self.score + 1
@@ -70,6 +69,7 @@ class Flappy():
             self._snd_pipe.play()
 
     def load_all(self):
+        self.hit_flag = False
         self.game_w = GAME_SIZE[0]
         self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
@@ -110,13 +110,8 @@ class Flappy():
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
-        pipe2 = Pipe_S(
-            self,
-            self.game_w,
-            self.floor_y -
-            PIPE_IH -
-            DIST,
-            self._factor)
+        pipe2 = Pipe_S(self, self.game_w, self.floor_y - PIPE_IH - DIST,
+                       self._factor)
         self.sprites.add(pipe1, layer=1)
         self.sprites.add(pipe2, layer=1)
         self.tubes.add(pipe1)
@@ -127,6 +122,12 @@ class Flappy():
         self.floor.mVel = -5 * self._factor
         self.sprites.remove(self.end_scores)
         self.sprites.remove(self.message)
+
+    def check_collision(self, sprite1, sprite2):
+        x_offset = sprite2.rect.x - sprite1.rect.x
+        y_offset = sprite2.rect.y - sprite1.rect.y
+        offset = (x_offset, y_offset)
+        return sprite1.mask.overlap(sprite2.mask, offset) is not None
 
     def run(self):
         for event in pygame.event.get():
@@ -156,6 +157,8 @@ class Flappy():
             self._snd_pipe.set_volume(0.5)
             self._snd_bird = pygame.mixer.Sound('data/sounds/bird.ogg')
             self._snd_bird.set_volume(0.5)
+            self._snd_hit = pygame.mixer.Sound('data/sounds/hit.ogg')
+            self._snd_hit.set_volume(0.15)
         except BaseException:
             self.sound_enable = False
         self.load_all()
@@ -196,12 +199,15 @@ class Flappy():
             self.sprites.update()
             self.sprites.draw(self.screen)
 
-            col = pygame.sprite.spritecollide(self.bird, self.tubes, False)
-            if not(col == []):
+            col = [sprite for sprite in self.tubes if self.check_collision(
+                self.bird, sprite)]
+            if col != []:
+                if self.sound_enable and self.sound and not self.hit_flag:
+                    self._snd_hit.play()
+                    self.hit_flag = True
                 self.state = END
-                self.bird.mAcc = 0
-                self.bird.count = -99
                 self.floor.mVel = 0
+                self.background.mVel = 0
                 for spr in self.tubes:
                     spr.mVel = 0
                 if self.score > self.best:
@@ -211,9 +217,14 @@ class Flappy():
                 self.sprites.draw(self.screen)
 
             pygame.display.flip()
-            self.clock.tick(30)
+            self.clock.tick(FPS)
 
 
 if __name__ == "__main__":
     g = Flappy()
+    # GAME_SIZE = (1920, 900)
+    # GAME_SIZE = (1024, 768)
+    # GAME_SIZE = (684, 600)
+    GAME_SIZE = (400, 900)
+    g.screen = pygame.display.set_mode(GAME_SIZE)
     g.run()
