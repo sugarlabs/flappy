@@ -30,7 +30,7 @@ from sugar3.graphics.style import GRID_CELL_SIZE
 from floor import Floor
 from pipe import Pipe_I
 from pipe import Pipe_S
-from background import make_back
+from background import Background
 from bird import Bird
 from scores import EndScore
 from scores import Message
@@ -86,9 +86,9 @@ class Flappy():
         self.score = 0
         self.sprites = pygame.sprite.LayeredUpdates()
         self.tubes = pygame.sprite.LayeredUpdates()
-        self.background = make_back(self)
-        self.screen.blit(self.background, (0, 0))
         #######################################################################
+        self.background = Background(self, self._factor)
+        self.background.mVel = 0
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
         self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
@@ -97,6 +97,7 @@ class Flappy():
         self.message = Message(self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self, self.sc_x, 100)
         #######################################################################
+        self.sprites.add(self.background, layer=-1)
         self.sprites.add(self.floor, layer=0)
         self.sprites.add(self.bird, layer=2)
         self.sprites.add(self.message, layer=3)
@@ -122,6 +123,7 @@ class Flappy():
         self.tubes.add(pipe2)
         self.tubes.add(self.floor)
         self.sprites.add(self.currentS, layer=3)
+        self.background.mVel = 5 * self._factor
         self.bird.mAcc = 5 * self._factor
         self.bird.count = 20
         self.floor.mVel = -5 * self._factor
@@ -191,7 +193,6 @@ class Flappy():
             if self.state == PAUSE:
                 continue
 
-            self.sprites.clear(self.screen, self.background)
             self.sprites.update()
             self.sprites.draw(self.screen)
 
