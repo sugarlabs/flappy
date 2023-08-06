@@ -222,9 +222,6 @@ class Flappy():
 
 if __name__ == "__main__":
     g = Flappy()
-    # GAME_SIZE = (1920, 900)
-    # GAME_SIZE = (1024, 768)
-    # GAME_SIZE = (684, 600)
     GAME_SIZE = (400, 900)
     g.screen = pygame.display.set_mode(GAME_SIZE)
     g.run()
