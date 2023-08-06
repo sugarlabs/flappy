@@ -17,7 +17,7 @@ class Bird(pygame.sprite.Sprite):
         self.index = 0
         self.counter = 0
         self.count_flap = 0
-        for num in range(0, 3):
+        for num in range(3):
             img = pygame.image.load(
                 f"data/images/bird_{num}.png").convert_alpha()
             self.images.append(img)
