@@ -1,0 +1,9 @@
+v6
+
+* Add movement to background (Dimitris Mylonas)
+* Make floor speed adjust to difficulty (Dimitris Mylonas)
+* Use different font that fits better with the game's character (Dimitris Mylonas)
+* Add accelaration to the birds vertical speed (Dimitris Mylonas)
+* Make rotation of the bird smoother (Dimitris Mylonas)
+* Replace activity's icon (Dimitris Mylonas)
+* Update README (Chihurumnaya Ibiam)
