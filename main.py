@@ -58,8 +58,9 @@ class Flappy():
 
     def __init__(self):
         self.state = INIT
-        self.best = 0
+        self.best_scores = [0, 0, 0]
         self.sound = True
+        self.level = 3  # Default: 3 for hard
         self._factor = 1  # Default: 1 for hard
 
     def increment_score(self):
@@ -103,10 +104,8 @@ class Flappy():
         self.sprites.add(self.message, layer=3)
 
     def set_level(self, level):
-        factor = level / 3.0
-        if self._factor != factor:
-            self.best = 0
-        self._factor = factor
+        self.level = level
+        self._factor = self.level / 3.0
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
@@ -171,8 +170,11 @@ class Flappy():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN or (
-                        event.type == pygame.KEYDOWN and (
-                        event.key == pygame.K_SPACE or event.key == pygame.K_UP)):
+                    event.type == pygame.KEYDOWN and any(
+                        event.key == pygame.K_SPACE,
+                        event.key == pygame.K_UP
+                    )
+                ):
                     if self.state == INIT:
                         self.state = PLAY
                         self.load_game()
@@ -210,9 +212,10 @@ class Flappy():
                 self.background.mVel = 0
                 for spr in self.tubes:
                     spr.mVel = 0
-                if self.score > self.best:
-                    self.best = self.score
-                self.end_scores.update_scores(self.score, self.best)
+                if self.score > self.best_scores[self.level - 1]:
+                    self.best_scores[self.level - 1] = self.score
+                self.end_scores.update_scores(self.score,
+                                              self.best_scores[self.level - 1])
                 self.sprites.add(self.end_scores, layer=3)
                 self.sprites.draw(self.screen)
 
