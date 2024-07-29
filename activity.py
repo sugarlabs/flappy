@@ -91,10 +91,14 @@ class Activity(activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
+        stop_button.connect('clicked', self._stop_cb)
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
         self.show_all()
+
+    def _stop_cb(self, button):
+        self.game.running = False
 
     def sound_control(self, button):
         self.sound = not self.sound
