@@ -20,12 +20,17 @@
 # Contact information:
 # Alan Aguiar alanjas@hotmail.com
 
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gtk_present = True
+try:
+    import gi
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk
+except (ImportError, ValueError):
+    gtk_present = False
 
 import pygame
-from sugar3.graphics.style import GRID_CELL_SIZE
+
+from resources import loadSound, loadImage
 
 from floor import Floor
 from pipe import Pipe_I
@@ -53,15 +58,21 @@ PAUSE = 3
 INIT_BIRD_SPEED = 8
 FPS = 30
 
+GAME_SIZE = (400, 900)
+MIN_SIZE = (320, MIN_HEIGHT + 160)
+
 
 class Flappy():
 
     def __init__(self):
+        self.running = False
         self.state = INIT
         self.best_scores = [0, 0, 0]
         self.sound = True
         self.level = 3  # Default: 3 for hard
         self._factor = 1  # Default: 1 for hard
+        self.game_w = GAME_SIZE[0]
+        self.game_h = GAME_SIZE[1]
 
     def increment_score(self):
         self.score = self.score + 1
@@ -71,8 +82,6 @@ class Flappy():
 
     def load_all(self):
         self.hit_flag = False
-        self.game_w = GAME_SIZE[0]
-        self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
         self.bird_x = self.game_w / 3 - FLOOR_Y
         self.bird_y = self.game_h / 2
@@ -89,13 +98,19 @@ class Flappy():
         self.sprites = pygame.sprite.LayeredUpdates()
         self.tubes = pygame.sprite.LayeredUpdates()
         #######################################################################
+        # load once reused images
+        self._pipe_head = loadImage('head_pipe.png')
+        self._pipe_body = loadImage('pipe.png')
+        self._back = loadImage('score_alfa.png')
+        self._mes = loadImage('init_alfa.png')
+        #######################################################################
         self.background = Background(self, self._factor)
         self.background.mVel = 0
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
         self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
-        self.end_scores = EndScore(self.end_s_x, 200)
-        self.message = Message(self.mes_x, self.mes_y)
+        self.end_scores = EndScore(self, self.end_s_x, 200)
+        self.message = Message(self, self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self, self.sc_x, 100)
         #######################################################################
         self.sprites.add(self.background, layer=-1)
@@ -104,8 +119,36 @@ class Flappy():
         self.sprites.add(self.message, layer=3)
 
     def set_level(self, level):
+        if level not in (1, 2, 3):
+            raise ValueError("level must be 1, 2 or 3")
+        if level == self.level:
+            return
         self.level = level
         self._factor = self.level / 3.0
+        if self.running:
+            self.state = INIT
+            self.load_all()
+
+    def resize(self, size):
+        # Sugar's configure event describes the whole activity, including its
+        # toolbar. Use the actual canvas allocation after pumping GTK events.
+        canvas = getattr(self, 'canvas', None)
+        if canvas is not None:
+            allocation = canvas.get_allocation()
+            size = (allocation.width, allocation.height)
+        if size[0] <= 0 or size[1] <= 0:
+            return
+        # Keep enough room for both pipes and the gap, even in a tiny window.
+        size = (max(MIN_SIZE[0], size[0]), max(MIN_SIZE[1], size[1]))
+        if (size == (self.game_w, self.game_h) and
+                pygame.display.get_surface().get_size() == size):
+            return
+        self.screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+        if canvas is not None:
+            canvas._screen = self.screen  # Keep Sugar previews in sync.
+        self.game_w, self.game_h = self.screen.get_size()
+        self.state = INIT
+        self.load_all()
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
@@ -123,58 +166,52 @@ class Flappy():
         self.sprites.remove(self.message)
 
     def check_collision(self, sprite1, sprite2):
+        if not sprite1.rect.colliderect(sprite2.rect):
+            return False
         x_offset = sprite2.rect.x - sprite1.rect.x
         y_offset = sprite2.rect.y - sprite1.rect.y
         offset = (x_offset, y_offset)
         return sprite1.mask.overlap(sprite2.mask, offset) is not None
 
     def run(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            elif event.type == pygame.VIDEORESIZE:
-                pygame.display.set_mode(
-                    (event.size[0], event.size[1] - GRID_CELL_SIZE),
-                    pygame.RESIZABLE)
-                break
+        if self.running:
+            return
         pygame.display.init()
         pygame.font.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
         if self.screen:
-            w = self.screen.get_width()
-            h = self.screen.get_height()
-            global GAME_SIZE
-            GAME_SIZE = [w, h]
+            self.game_w, self.game_h = self.screen.get_size()
         else:
-            self.screen = pygame.display.set_mode(GAME_SIZE)
+            self.screen = pygame.display.set_mode(GAME_SIZE, pygame.RESIZABLE)
             pygame.display.set_caption('Flappy')
         self.sound_enable = True
         try:
             pygame.mixer.init()
-            self._snd_pipe = pygame.mixer.Sound('data/sounds/pipe.ogg')
-            self._snd_pipe.set_volume(0.5)
-            self._snd_bird = pygame.mixer.Sound('data/sounds/bird.ogg')
-            self._snd_bird.set_volume(0.5)
-            self._snd_hit = pygame.mixer.Sound('data/sounds/hit.ogg')
-            self._snd_hit.set_volume(0.15)
-        except BaseException:
+            self._snd_pipe = loadSound('pipe.ogg', 0.5)
+            self._snd_bird = loadSound('bird.ogg', 0.5)
+            self._snd_hit = loadSound('hit.ogg', 0.15)
+        except (pygame.error, OSError):
             self.sound_enable = False
+        # cargo todo
         self.load_all()
         self.state = INIT
         self.running = True
         while self.running:
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+            if gtk_present:
+                while Gtk.events_pending():
+                    Gtk.main_iteration()
+            if not self.running:
+                break
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    break
+                elif event.type == pygame.VIDEORESIZE:
+                    self.resize(event.size)
                 elif event.type == pygame.MOUSEBUTTONDOWN or (
-                    event.type == pygame.KEYDOWN and any((
-                        event.key == pygame.K_SPACE,
-                        event.key == pygame.K_UP
-                    ))
-                ):
+                    event.type == pygame.KEYDOWN and
+                    event.key in (pygame.K_SPACE, pygame.K_UP)):
                     if self.state == INIT:
                         self.state = PLAY
                         self.load_game()
@@ -195,15 +232,18 @@ class Flappy():
                         elif self.state == PLAY:
                             self.state = PAUSE
 
+            if not self.running:
+                break
             if self.state == PAUSE:
+                self.clock.tick(FPS)
                 continue
 
             self.sprites.update()
             self.sprites.draw(self.screen)
 
-            col = [sprite for sprite in self.tubes if self.check_collision(
-                self.bird, sprite)]
-            if col != []:
+            if self.state == PLAY and any(
+                    self.check_collision(self.bird, sprite)
+                    for sprite in self.tubes):
                 if self.sound_enable and self.sound and not self.hit_flag:
                     self._snd_hit.play()
                     self.hit_flag = True
@@ -224,7 +264,10 @@ class Flappy():
 
 
 if __name__ == "__main__":
+    pygame.init()
     g = Flappy()
-    GAME_SIZE = (400, 900)
-    g.screen = pygame.display.set_mode(GAME_SIZE)
-    g.run()
+    try:
+        g.run()
+    finally:
+        pygame.quit()
+
